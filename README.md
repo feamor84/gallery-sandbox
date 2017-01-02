@@ -7,3 +7,4 @@ Version 0.3.1
 * change number of images in row on dependency of window width
 * add support for keyboard
 * make proper width and height for lightbox
+* add cross-anchor to top-right 
