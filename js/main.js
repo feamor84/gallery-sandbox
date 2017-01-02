@@ -5,15 +5,21 @@
 
 var wrapper = document.getElementById('wrapper');
 var images = document.getElementById('wrapper').getElementsByTagName('img');
+var imagesLinks = [];
 var options = {
     wrapperHeight: 500,
     imagesInRow: 4
 };
+var urlPath = window.location.protocol + '//' + window.location.hostname + '' + window.location.pathname;
+var lightboxContent;
 
 for (var i = 0; i < images.length; i++) {
     var imageWrapper = document.createElement('div');
     var imageOveraly = document.createElement('div');
     var imageMagnifier = document.createElement('div');
+
+    // create Array of links
+    imagesLinks.push(images[i].getAttribute('src'));
 
     imageWrapper.className = 'gallery-item';
     // set styles to imageoverlay
@@ -33,8 +39,7 @@ for (var i = 0; i < images.length; i++) {
     imageOveraly.appendChild(imageMagnifier);
 }
 
-(function (options, wrapper) {
-
+(function () {
     var galleryItems = document.getElementsByClassName('gallery-item');
     var wrapperWidth = wrapper.getBoundingClientRect().width;
     var imageHeight = (galleryItems.length % options.imagesInRow === 0 ? options.wrapperHeight / (galleryItems.length / options.imagesInRow) : (options.wrapperHeight / parseInt(galleryItems.length / options.imagesInRow + 1)));
@@ -53,11 +58,12 @@ for (var i = 0; i < images.length; i++) {
 
     }
 
-}(options, wrapper));
+}());
 
 function enableLightBox(e) {
+    var imagePositionInArray = imagesLinks.indexOf(this.childNodes[0].getAttribute('src'));
     var lightboxWrapper = document.createElement('div');
-    var lightboxContent = document.createElement('img');
+    lightboxContent = document.createElement('img');
     lightboxContent.src = this.childNodes[0].src;
     var lightboxContentWidth = lightboxContent.width;
     var lightboxContentHeight = lightboxContent.height;
@@ -70,13 +76,13 @@ function enableLightBox(e) {
         var navigationLeft = document.createElement('div');
         navigationLeft.setAttribute('style', 'position: absolute; width: 64px; height: 64px; left: 0; top: 50%; transform: translateY(-50%); z-index: 9999;');
         navigationLeft.style.backgroundImage = "url('img/left.png')";
-        navigationLeft.addEventListener('click', navGalleryPrev, false);
+        var navigationLeftEvent = navigationLeft.addEventListener('click', navGalleryPrev.bind(null, imagePositionInArray), false);
         lightboxWrapper.appendChild(navigationLeft);
 
         var navigationRight = document.createElement('div');
         navigationRight.setAttribute('style', 'position: absolute; width: 64px; height: 64px; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999;');
         navigationRight.style.backgroundImage = "url('img/right.png')";
-        navigationRight.addEventListener('click', navGalleryNext, false);
+        var navigationRightEvent = navigationRight.addEventListener('click', navGalleryNext.bind(null, imagePositionInArray), false);
         lightboxWrapper.appendChild(navigationRight);
     }
 
@@ -131,10 +137,10 @@ function disableOverlay(e) {
     }());
 }
 
-function navGalleryPrev() {
-    console.log('prev');
+function navGalleryPrev(el) {
+    console.log(el);
 }
 
-function navGalleryNext() {
-    console.log('next');
+function navGalleryNext(el) {
+    console.log(el);
 }
