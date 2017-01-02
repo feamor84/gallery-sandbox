@@ -1,0 +1,14 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.gallery-item {
+    float: left;
+    overflow: hidden;
+    position: relative;
+}
+
+.gallery-item img+div {
+    cursor: pointer;
+}
