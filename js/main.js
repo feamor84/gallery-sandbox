@@ -12,6 +12,7 @@ var options = {
 };
 var urlPath = window.location.protocol + '//' + window.location.hostname + '' + window.location.pathname;
 var lightboxContent;
+var currentImage = null;
 
 for (var i = 0; i < images.length; i++) {
     var imageWrapper = document.createElement('div');
@@ -108,7 +109,10 @@ function enableLightBox(e) {
     // show lightbox
     document.body.appendChild(lightboxWrapper);
     lightboxWrapper.addEventListener('click', function (e) {
-        if (e.target.getAttribute('lightbox') === 'true') this.parentNode.removeChild(this);
+        if (e.target.getAttribute('lightbox') === 'true') {
+            this.parentNode.removeChild(this);
+            currentImage = null
+        };
     }, false);
 }
 
@@ -138,9 +142,19 @@ function disableOverlay(e) {
 }
 
 function navGalleryPrev(el) {
-    console.log(el);
+    if (currentImage === null) currentImage = el;
+    if (currentImage <= 0) currentImage = imagesLinks.length;
+    lightboxContent.src = imagesLinks[currentImage - 1];
+    currentImage--;
 }
 
 function navGalleryNext(el) {
-    console.log(el);
+    if (currentImage === null) currentImage = el;
+    if (currentImage >= (imagesLinks.length - 1)) {
+        lightboxContent.src = imagesLinks[0];
+        currentImage = -1;
+    } else {
+        lightboxContent.src = imagesLinks[currentImage + 1];
+    }
+    currentImage++;
 }
